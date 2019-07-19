@@ -13797,6 +13797,14 @@ Percentage of dog faces detected in dog files: 100.0%
 <p><img src="images/sample_cnn.png" alt="Sample CNN"></p>
 <p><strong>Question 4:</strong> Outline the steps you took to get to your final CNN architecture and your reasoning at each step.  If you chose to use the hinted architecture above, describe why you think that CNN architecture should work well for the image classification task.</p>
 <p><strong>Answer:</strong></p>
+<p>An empirically iterative approach is applied to building this CNN. I referenced a previous CNN we had built for the MNIST dataset. The MNIST dataset included simple (28, 28, 1) grey scale images, which is significantly different from the (224, 224, 3) images we are dealing with in the dog dataset here. Given that we are dealing with larger images and a more complex problem, it was evident that a larger network would be required.</p>
+<p>Our goal is to make the arrays of images increase deeper and decrease wide and height. Conv2D and MaxPooling2D stages are iteratively added to the network. Conv2D makes arrays deeper and MaxPooling2D makes arrays decrease spatial dimensions. This process both increases the capacity of the network and further reduces the size of the feature maps so that they are not too large upon reaching the flatten layer.</p>
+<p>MaxPooling2D layers were chosen to implement as opposed to AveragePooling2D. From reference [1], for image data, max pooling is better for extracting the extreme features than AveragePooling2D. Basically, features tend to encode a pattern over the various sections of the feature map and it’s more informative to look at the maximal presence of the features than at their average presence. Howver, after three iterations of Conv2D and MaxPooling2D, GlobalAveragePooling2D is added that applies average pooling on the spatial dimensions until each spatial dimension is one, and leaves other dimensions unchanged.</p>
+<p>A kernal_size of 3 for Conv2D layers was chosen because I have read that they are typically 3 x 3 or 5 x 5 so I chose to go with 3 x 3. I chose 2 x 2 windows for my MaxPooling2D for the same reason, it seems like its a common choice.</p>
+<p>Followed by a Dropout layer to help prevent overfitting before finally being passed to the output layer that makes a prediction. The output layer has a softmax activation function which allows it maintain the probability distribution between numbers 0 and 1.</p>
+<ol>
+<li>Nouroz Rahman, What is the benefit of using average pooling rather than max pooling? May 6, 2017, <a href="https://www.quora.com/What-is-the-benefit-of-using-average-pooling-rather-than-max-pooling">https://www.quora.com/What-is-the-benefit-of-using-average-pooling-rather-than-max-pooling</a></li>
+</ol>
 
 </div>
 </div>
